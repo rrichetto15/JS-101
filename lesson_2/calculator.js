@@ -1,5 +1,7 @@
 const readline = require('readline-sync');
 
+console.log('test here');
+
 function prompt(message) {
   console.log(`=> ${message}`);
 }
