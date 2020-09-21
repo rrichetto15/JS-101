@@ -1,23 +1,54 @@
 const readline = require('readline-sync');
-const VALID_CHOICES = ['rock', 'paper', 'scissors'];
+const VALID_CHOICES = ['rock', 'paper', 'scissors', 'lizard', 'spock'];
+const WINNING_COMBOS = {
+  rock:     ['scissors', 'lizard'],
+  paper:    ['rock',     'spock'],
+  scissors: ['paper',    'lizard'],
+  lizard:   ['paper',    'spock'],
+  spock:    ['rock',     'scissors'],
+};
+
+const score = {
+  player: 0,
+  computer: 0
+}
 
 function prompt(message) {
   console.log(`=> ${message}`);
 }
 
+function playerWins(choice, computerChoice) {
+  return WINNING_COMBOS[choice].includes(computerChoice);
+}
+
 function displayWinner(choice, computerChoice) {
   prompt(`You chose ${choice}, computer chose ${computerChoice}`);
 
-  if ((choice === 'rock' && computerChoice === 'scissors') ||
-      (choice === 'paper' && computerChoice === 'rock') ||
-      (choice === 'scissors' && computerChoice === 'paper')) {
-    prompt('You win!');
-  } else if ((choice === 'rock' && computerChoice === 'paper') ||
-             (choice === 'paper' && computerChoice === 'scissors') ||
-             (choice === 'scissors' && computerChoice === 'rock')) {
-    prompt('Computer wins!');
-  } else {
+  if (playerWins(choice, computerChoice)) {
+    prompt('You win this round!');
+  } else if (choice === computerChoice) {
     prompt("It's a tie.");
+  } else {
+    prompt("Computer wins this round.");
+  }
+}
+
+function updateScore(choice, computerChoice) {
+  if (playerWins(choice, computerChoice)) {
+    score.player += 1;
+  } else if (choice === computerChoice) {
+    score.player += 0;
+  } else {
+    score.computer += 1;
+  }
+}
+
+function displayScore() {
+  if (score.player < 3 && score.computer < 3) {
+    prompt(`The current score is: Player (${score.player}), Computer (${score.computer})`);
+  } else {
+    prompt('GAME OVER');
+    prompt(`The FINAL SCORE is: Player (${score.player}), Computer (${score.computer})`);
   }
 }
 
@@ -35,12 +66,24 @@ while (true) {
 
   displayWinner(choice, computerChoice);
 
-  prompt('Do you want to play again (y/n)?');
-  let answer = readline.question().toLowerCase();
-  while (answer[0] !== 'n' && answer[0] !== 'y') {
-    prompt('Please enter "y" or "n".');
-    answer = readline.question().toLowerCase();
-  }
+  updateScore(choice, computerChoice);
 
-  if (answer[0] !== 'y') break;
+  displayScore();
+
+  if (score.player >= 3 || score.computer >= 3) {
+    prompt('Do you want to play again (y/n)?');
+    let answer = readline.question().toLowerCase();
+
+    while (answer[0] !== 'n' && answer[0] !== 'y') {
+      prompt('Please enter "y" or "n".');
+      answer = readline.question().toLowerCase();
+    }
+
+    if (answer[0] === 'y') {
+      score.player = 0;
+      score.computer = 0;
+    } else {
+      break;
+    }
+  }
 }
