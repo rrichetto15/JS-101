@@ -1,0 +1,7 @@
+// Add the family pet, "Dino", to the following array
+
+let flintstones = ["Fred", "Barney", "Wilma", "Betty", "Bambam", "Pebbles"];
+
+flintstones.push('Dino');
+
+console.log(flintstones);
