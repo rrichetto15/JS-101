@@ -49,6 +49,25 @@ rules:
 
 
 
+---------------------------------
+ DA - Data Structure & Algorithm
+---------------------------------
+
+DATA STRUCTURE:
+Array
+
+ALGORITHM:
+- declare a result variable and initialize it to an empty array
+- create an array named substrArray that contains all of the
+  substrings of the input string that are at least 2 characters long.
+- loop through the words in the substrArray array.
+- if the word is a palindrome, append it to the result
+  array
+- return the result array
+
+
+
+
 
 
 
