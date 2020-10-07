@@ -18,6 +18,5 @@ Object.entries(munsters).forEach(member => {
   console.log(`${name} is a ${age}-year-old ${gender}`);
 })
 
-
 // Expected pattern for each line of output: 
 // => (Name) is a (age)-year-old (male or female).
