@@ -35,7 +35,7 @@ function initializeBoard() {
 }
 
 function playerChoosesSquare(board) {
-  let square; // declared here so we can use it outside the loop
+  let square;
 
   while (true) {
     prompt(`Choose a square (${emptySquares(board).join(', ')}):`);
@@ -99,9 +99,6 @@ function detectWinner(board) {
 function prompt(message) {
   console.log(`=> ${message}`);
 }
-
-
-
 
 
 while (true) {
