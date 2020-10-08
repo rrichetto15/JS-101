@@ -4,6 +4,7 @@ const INITIAL_MARKER = ' ';
 const HUMAN_MARKER = 'X';
 const COMPUTER_MARKER = 'O';
 
+
 function displayBoard(board) {
   console.clear();
 
@@ -24,6 +25,7 @@ function displayBoard(board) {
   console.log('');
 }
 
+
 function initializeBoard() {
   let board = {};
 
@@ -34,19 +36,20 @@ function initializeBoard() {
   return board;
 }
 
+
 function playerChoosesSquare(board) {
   let square;
 
   while (true) {
     prompt(`Choose a square (${emptySquares(board).join(', ')}):`);
-    square = readline.question().trim(); // input trimmed to allow spaces in input
-    if (emptySquares(board).includes(square)) break; // break if it's a valid square
-
+    square = readline.question().trim(); // input trimmed in case of spaces
+    if (emptySquares(board).includes(square)) break; // break if a valid square
     prompt("Sorry, that's not a valid choice.");
   }
 
   board[square] = HUMAN_MARKER;
 }
+
 
 function computerChoosesSquare(board) {
   let randomIndex = Math.floor(Math.random() * emptySquares(board).length);
@@ -55,18 +58,22 @@ function computerChoosesSquare(board) {
   board[square] = COMPUTER_MARKER;
 }
 
+
 function emptySquares(board) {
   return Object.keys(board).filter(key => board[key] === INITIAL_MARKER);
 }
+
 
 function boardFull(board) {
   return emptySquares(board).length === 0;
 }
 
+
 function someoneWon(board) {
   return !!detectWinner(board);
-  // this is a common way to convert a truthy value to the boolean 'true', or a falsy value to 'false'
+  // this is a common way to convert a truthy value (like 'abc') to the boolean 'true', or a falsy value (like null) to the boolean 'false'
 }
+
 
 function detectWinner(board) {
   let winningLines = [
@@ -95,6 +102,7 @@ function detectWinner(board) {
 
   return null;
 }
+
 
 function prompt(message) {
   console.log(`=> ${message}`);
