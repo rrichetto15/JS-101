@@ -140,7 +140,6 @@ function findAtRiskSquare(line, board, marker) {
 
 function joinOr(arr, delimiter = ', ', finalDelimiter = 'or') {
   let joined = '';
-  console.log(arr);
 
   arr.forEach((num, index) => {
     if (!(index === arr.length - 1)) {

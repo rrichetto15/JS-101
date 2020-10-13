@@ -28,24 +28,54 @@ function initializeDeck() {
   return deck;
 }
 
-function dealCards(deck) {
+function dealCard(deck) {
   let cardsRemaining = deck.length;
-  let cards = [];
+  let card = [];
 
-  for (let i = 1; i <= CARDS_TO_DEAL; i++) {
-    cards.push(deck.splice(Math.floor(Math.random() * cardsRemaining), 1)[0][1]);
-    cardsRemaining = deck.length;
-  }
+  card.push(deck.splice(Math.floor(Math.random() * cardsRemaining), 1)[0][1]);
 
-  return cards;
+  return card;
 }
 
 function displayCards(playerCards, dealerCards) {
-  console.log(`Dealer has: ${dealerCards[0]} and ${dealerCards[1]}`);
-  console.log(`You have: ${playerCards[0]} and ${playerCards[1]}`);
+  console.log(`Dealer has: ${dealerCards[0]} and ${dealerCards[1]} => [ Total: ${getTotal(dealerCards)} ]`);
+  console.log(`You have: ${joinAnd(playerCards)} => [ Total: ${getTotal(playerCards)} ]`);
 }
 
+function getTotal(cards) {
+  let sum = 0;
 
+  cards.forEach(value => {
+    if (value[0] === 'A') {
+      sum += 11;
+    } else if (['J', 'Q', 'K'].includes(value[0])) {
+      sum += 10;
+    } else {
+      sum += Number(value[0]);
+    }
+  });
+
+  // correct for Aces
+  cards.filter(value => value[0] === 'A').forEach(_ => {
+    if (sum > 21) sum -= 10;
+  });
+
+  return sum;
+}
+
+function joinAnd(arr, delimiter = ', ', finalDelimiter = 'and') {
+  let joined = '';
+
+  arr.forEach((num, index) => {
+    if (!(index === arr.length - 1)) {
+      joined += `${String(num)}${delimiter}`;
+    } else {
+      joined += `${finalDelimiter} ${String(num)}`;
+    }
+  })
+
+  return joined;
+}
 
 
 
@@ -54,9 +84,17 @@ function displayCards(playerCards, dealerCards) {
 /* ---------------------------------------------------------------- */
 let deck = initializeDeck();
 
-let cardsDealt = dealCards(deck);
-
-let playerCards = cardsDealt.slice(0, 2);
-let dealerCards = cardsDealt.slice(2, 4);
+let playerCards = [dealCard(deck), dealCard(deck)];
+let dealerCards = [dealCard(deck), dealCard(deck)];
 
 displayCards(playerCards, dealerCards);
+getTotal(playerCards);
+
+while (true) {
+  prompt('Hit (h) or Stay (s)?');
+  let answer = readline.question();
+  if (answer === 's') break;
+
+  playerCards.push(dealCard(deck));
+  displayCards(playerCards, dealerCards);
+}
