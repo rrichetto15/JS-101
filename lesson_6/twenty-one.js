@@ -21,9 +21,9 @@ function initializeDeck() {
 
   suits.forEach(suit => {
     values.forEach(value => {
-      deck.push([suit, value])
-    })
-  })
+      deck.push([suit, value]);
+    });
+  });
 
   return deck;
 }
@@ -79,7 +79,7 @@ function displayWinner(playerTotal, dealerTotal) {
   } else if (playerTotal < dealerTotal) {
     prompt('--- Dealer Wins! ---');
   } else {
-    prompt('--- Tie Game! ---')
+    prompt('--- Tie Game! ---');
   }
 }
 
@@ -92,7 +92,7 @@ function joinAnd(arr, delimiter = ', ', finalDelimiter = 'and') {
     } else {
       joined += `${finalDelimiter} ${String(num)}`;
     }
-  })
+  });
 
   return joined;
 }
@@ -115,7 +115,6 @@ while (true) {
   while (true) {
     prompt('Hit (h) or Stay (s)?');
     answer = readline.question().toLowerCase();
-  
     if (['h', 's'].includes(answer)) break;
     prompt(`Please enter either 'h' or 's`);
   }
@@ -144,7 +143,7 @@ while (getTotal(dealerCards) < 17) {
 }
 
 if (busted(getTotal(dealerCards)))  {
-  console.log(`The dealer busted. Total = ${getTotal(playerCards)}`)
+  console.log(`The dealer busted. Total = ${getTotal(playerCards)}`);
 }
 
 prompt(`*** FINAL RESULTS ***`);
