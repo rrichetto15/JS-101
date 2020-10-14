@@ -1,6 +1,6 @@
 const readline = require('readline-sync');
 
-const CARDS_TO_DEAL = 4;
+const WINNING_VALUE = 21;
 
 function prompt(message) {
   console.log(`=> ${message}`);
@@ -38,8 +38,8 @@ function dealCard(deck) {
 }
 
 function displayCards(playerCards, dealerCards) {
-  console.log(`Dealer has: ${dealerCards[0]} and ${dealerCards[1]} => [ Total: ${getTotal(dealerCards)} ]`);
-  console.log(`You have: ${joinAnd(playerCards)} => [ Total: ${getTotal(playerCards)} ]`);
+  prompt(`Dealer has: ${joinAnd(dealerCards)} => [ Total: ${getTotal(dealerCards)} ]`);
+  prompt(`You have: ${joinAnd(playerCards)} => [ Total: ${getTotal(playerCards)} ]`);
 }
 
 function getTotal(cards) {
@@ -57,10 +57,30 @@ function getTotal(cards) {
 
   // correct for Aces
   cards.filter(value => value[0] === 'A').forEach(_ => {
-    if (sum > 21) sum -= 10;
+    if (sum > WINNING_VALUE) sum -= 10;
   });
 
   return sum;
+}
+
+function busted(total) {
+  if (total > WINNING_VALUE) {
+    return true;
+  }
+}
+
+function displayWinner(playerTotal, dealerTotal) {
+  if (playerTotal > 21) {
+    prompt(`--- You busted. Dealer Wins. ---`);
+  } else if (dealerTotal > 21) {
+    prompt(`--- Dealer busted. You Win. ---`);
+  } else if (playerTotal > dealerTotal) {
+    prompt('--- Player Wins! ---');
+  } else if (playerTotal < dealerTotal) {
+    prompt('--- Dealer Wins! ---');
+  } else {
+    prompt('--- Tie Game! ---')
+  }
 }
 
 function joinAnd(arr, delimiter = ', ', finalDelimiter = 'and') {
@@ -88,13 +108,47 @@ let playerCards = [dealCard(deck), dealCard(deck)];
 let dealerCards = [dealCard(deck), dealCard(deck)];
 
 displayCards(playerCards, dealerCards);
-getTotal(playerCards);
 
 while (true) {
-  prompt('Hit (h) or Stay (s)?');
-  let answer = readline.question();
-  if (answer === 's') break;
+  let answer = '';
 
-  playerCards.push(dealCard(deck));
+  while (true) {
+    prompt('Hit (h) or Stay (s)?');
+    answer = readline.question().toLowerCase();
+  
+    if (['h', 's'].includes(answer)) break;
+    prompt(`Please enter either 'h' or 's`);
+  }
+  
+  if (answer === 'h') {
+    playerCards.push(dealCard(deck));
+    displayCards(playerCards, dealerCards);
+  }
+
+  if (answer === 's' || busted(getTotal(playerCards))) break;
+}
+
+if (busted(getTotal(playerCards))) {
+  displayWinner(getTotal(playerCards), getTotal(dealerCards));
+  return -1;
+} else {
+  console.log(`You chose to stay. Total = ${getTotal(playerCards)}`);
+}
+
+prompt(`Dealer's turn...`);
+
+while (getTotal(dealerCards) < 17) {
+
+  dealerCards.push(dealCard(deck));
   displayCards(playerCards, dealerCards);
 }
+
+if (busted(getTotal(dealerCards)))  {
+  console.log(`The dealer busted. Total = ${getTotal(playerCards)}`)
+}
+
+prompt(`*** FINAL RESULTS ***`);
+displayCards(playerCards, dealerCards);
+
+
+displayWinner(getTotal(playerCards), getTotal(dealerCards));
